@@ -208,14 +208,18 @@
         method: 'POST',
         body: formData,
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded', // Ensure the content type is correct
+            'Content-Type': 'application/x-www-form-urlencoded',
         }
     })
     .then(response => {
         if (response.ok) {
             alert('Form submitted successfully!');
         } else {
-            alert('Error during submission!');
+            // Log the actual error response for debugging
+            response.text().then(text => {
+                console.error('Error Response:', text);
+                alert('Error during submission: ' + text);
+            });
         }
     })
     .catch(error => {
@@ -223,6 +227,7 @@
         alert('An error occurred during form submission. Please try again.');
     });
 }
+
 
     </script>
 </body>
