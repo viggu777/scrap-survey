@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>IIT Scrap Management Survey</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Poppins:wght@300;500;700&family=Space+Grotesk:wght@500&display=swap"
+        rel="stylesheet">
+    <link href="style.css" rel="stylesheet" />
+</head>
+
+<body>
+    <header>
+        <img src="https://cdn.pixabay.com/photo/2012/04/11/18/12/recycle-29227_640.png" alt="Recycle Icon" />
+        <h1>♻️ IIT Scrap Survey Initiative</h1>
+        <p>
+            We're gathering public insights on scrap handling and Extended Producer Responsibility (EPR) compliance.
+            Your feedback will shape our student-led research project focused on sustainable innovation.
+        </p>
+    </header>
+
+    <div class="counters">
+        <div class="counter-box">
+            <h2 id="visits">0</h2>
+            <p>Visitors</p>
+        </div>
+        <div class="counter-box">
+            <h2 id="submissions">0</h2>
+            <p>Surveys Submitted</p>
+        </div>
+        <div class="counter-box">
+            <h2 id="interests">0</h2>
+            <p>Interest Clicks</p>
+        </div>
+    </div>
+
+    <div class="survey">
+        <form id="surveyForm">
+            <div class="question">
+                <label>Your Name</label>
+                <input type="text" name="name" placeholder="Enter your full name" required />
+            </div>
+            <div class="question">
+                <label>Email Address</label>
+                <input type="email" name="email" placeholder="Enter your email address" required />
+            </div>
+            <div class="question">
+                <label>1. How often do you recycle waste?</label>
+                <select name="recycle_frequency" required>
+                    <option value="" disabled selected>Select your frequency</option>
+                    <option>Frequently</option>
+                    <option>Sometimes</option>
+                    <option>Rarely</option>
+                </select>
+            </div>
+            <div class="question">
+                <label>2. What are the main challenges you face in recycling?</label>
+                <textarea name="recycling_challenges" placeholder="Describe the challenges you encounter"></textarea>
+            </div>
+            <div class="question">
+                <label>3. Are you aware of EPR regulations?</label>
+                <select name="epr_awareness" required>
+                    <option value="" disabled selected>Select your awareness level</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                    <option>Somewhat</option>
+                </select>
+            </div>
+            <div class="question">
+                <label>4. Do you segregate scrap before disposal?</label>
+                <select name="scrap_segregation" required>
+                    <option value="" disabled selected>Select your practice</option>
+                    <option>Always</option>
+                    <option>Sometimes</option>
+                    <option>Never</option>
+                </select>
+            </div>
+            <div class="question">
+                <label>5. Would you prefer rewards for recycling?</label>
+                <select name="rewards_preference" required>
+                    <option value="" disabled selected>Select your preference</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                    <option>Depends</option>
+                </select>
+            </div>
+            <div class="question">
+                <label>6. What kind of rewards interest you?</label>
+                <input type="text" name="reward_types" placeholder="List reward types that would motivate you" />
+            </div>
+            <div class="question">
+                <label>7. How likely are you to use a recycling app?</label>
+                <select name="recycling_app_likelihood" required>
+                    <option value="" disabled selected>Select likelihood</option>
+                    <option>Very Likely</option>
+                    <option>Maybe</option>
+                    <option>Unlikely</option>
+                </select>
+            </div>
+            <div class="question">
+                <label>8. Would you support gamified recycling?</label>
+                <select name="gamified_support" required>
+                    <option value="" disabled selected>Select your support level</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                </select>
+            </div>
+            <div class="question">
+                <label>9. How do you dispose of e-waste?</label>
+                <textarea name="ewaste_disposal" placeholder="Describe your e-waste disposal methods"></textarea>
+            </div>
+            <div class="question">
+                <label>10. Suggestions to improve scrap systems?</label>
+                <textarea name="scrap_suggestions" placeholder="Share your ideas for improvement"></textarea>
+            </div>
+            <div class="center-button">
+                <button type="submit">Submit Survey</button>
+                <div id="submitMessage" class="submit-message" style="display: none;">
+                    🎉 Thank you for your response! Your input has been recorded.
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+    <div style="text-align:center; margin: 3rem;">
+        <button id="interestBtn">I'm Interested</button>
+    </div>
+
+    <!-- Popup HTML -->
+    <div class="popup-overlay" id="interestPopup">
+        <div class="popup-container">
+            <button class="popup-close" id="closePopup">&times;</button>
+            <div class="popup-content">
+                <div class="popup-icon">♻️</div>
+                <h2>Thank You!</h2>
+                <p>We appreciate your interest in our scrap management initiative. Your responses will help us create
+                    better recycling solutions.</p>
+                <button class="popup-btn" id="closePopupBtn">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize counters
+        let counters = {
+            visits: localStorage.getItem('visits') || 0,
+            submissions: localStorage.getItem('submissions') || 0,
+            interests: localStorage.getItem('interests') || 0
+        };
+
+        // Increment visit counter
+        counters.visits++;
+        localStorage.setItem('visits', counters.visits);
+        updateCounters();
+
+        // Form submission handler
+        document.getElementById('surveyForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Increment submission counter
+            counters.submissions++;
+            localStorage.setItem('submissions', counters.submissions);
+
+            // Show success message
+            document.getElementById('submitMessage').style.display = 'block';
+
+            // Submit to Google Sheets
+            submitToGoogleSheets();
+
+            // Reset form
+            this.reset();
+            updateCounters();
+        });
+
+        // Interest button handler
+        document.getElementById('interestBtn').addEventListener('click', () => {
+            if (!localStorage.getItem('interestClicked')) {
+                counters.interests++;
+                localStorage.setItem('interests', counters.interests);
+                localStorage.setItem('interestClicked', true);
+                updateCounters();
+            }
+            document.getElementById('interestPopup').classList.add('active');
+        });
+
+        // Close popup handlers
+        document.getElementById('closePopup').addEventListener('click', () => {
+            document.getElementById('interestPopup').classList.remove('active');
+        });
+
+        document.getElementById('closePopupBtn').addEventListener('click', () => {
+            document.getElementById('interestPopup').classList.remove('active');
+        });
+
+        // Close when clicking outside popup
+        document.getElementById('interestPopup').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('interestPopup')) {
+                document.getElementById('interestPopup').classList.remove('active');
+            }
+        });
+
+        // Update counter displays
+        function updateCounters() {
+            document.getElementById('visits').innerText = counters.visits;
+            document.getElementById('submissions').innerText = counters.submissions;
+            document.getElementById('interests').innerText = counters.interests;
+        }
+
+        // Google Sheets submission function
+        function submitToGoogleSheets() {
+            const form = document.getElementById('surveyForm');
+            const formData = new FormData(form);
+
+            fetch('https://script.google.com/macros/s/AKfycbydUXdjeUYNZ9TDQX-wInOy7Z9mCQwxIwu_WSDgbt2ExQo9aW6k188fMWctesRF9js35Q/exec', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    console.log('Success!', response);
+                })
+                .catch(error => {
+                    console.error('Error during submission:', error);
+                });
+        }
+
+
+    </script>
+</body>
+
+</html>
