@@ -1,24 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>IIT Scrap Management Survey</title>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Poppins:wght@300;500;700&family=Space+Grotesk:wght@500&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&family=Poppins:wght@300;500;700&family=Space+Grotesk:wght@500&display=swap" rel="stylesheet">
     <link href="style.css" rel="stylesheet" />
 </head>
-
 <body>
     <header>
         <img src="https://cdn.pixabay.com/photo/2012/04/11/18/12/recycle-29227_640.png" alt="Recycle Icon" />
         <h1>♻️ IIT Scrap Survey Initiative</h1>
-        <p>
-            We're gathering public insights on scrap handling and Extended Producer Responsibility (EPR) compliance.
-            Your feedback will shape our student-led research project focused on sustainable innovation.
-        </p>
+        <p>We're gathering public insights on scrap handling and Extended Producer Responsibility (EPR) compliance.
+            Your feedback will shape our student-led research project focused on sustainable innovation.</p>
     </header>
 
     <div class="counters">
@@ -124,20 +118,17 @@
         </form>
     </div>
 
-
     <div style="text-align:center; margin: 3rem;">
         <button id="interestBtn">I'm Interested</button>
     </div>
 
-    <!-- Popup HTML -->
     <div class="popup-overlay" id="interestPopup">
         <div class="popup-container">
             <button class="popup-close" id="closePopup">&times;</button>
             <div class="popup-content">
                 <div class="popup-icon">♻️</div>
                 <h2>Thank You!</h2>
-                <p>We appreciate your interest in our scrap management initiative. Your responses will help us create
-                    better recycling solutions.</p>
+                <p>We appreciate your interest in our scrap management initiative. Your responses will help us create better recycling solutions.</p>
                 <button class="popup-btn" id="closePopupBtn">Continue</button>
             </div>
         </div>
@@ -168,7 +159,7 @@
             document.getElementById('submitMessage').style.display = 'block';
 
             // Submit to Google Sheets
-            submitToGoogleSheets();
+            submitToGoogleSheets(e); // Pass the event to the function
 
             // Reset form
             this.reset();
@@ -211,28 +202,24 @@
 
         // Google Sheets submission function
         function submitToGoogleSheets(e) {
-  const formData = new FormData(e.target);
-  
-  fetch('https://script.google.com/macros/s/AKfycbydUXdjeUYNZ9TDQX-wInOy7Z9mCQwxIwu_WSDgbt2ExQo9aW6k188fMWctesRF9js35Q/exec', {
-    method: 'POST',
-    body: formData,
-    mode: 'no-cors' // Add this line to disable CORS validation
-  })
-  .then(response => {
-    if (response.ok) {
-      alert('Form submitted successfully!');
-    } else {
-      alert('Error during submission!');
-    }
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
-}
+            const formData = new FormData(e.target);
 
-
-
+            fetch('https://script.google.com/macros/s/AKfycbydUXdjeUYNZ9TDQX-wInOy7Z9mCQwxIwu_WSDgbt2ExQo9aW6k188fMWctesRF9js35Q/exec', {
+                method: 'POST',
+                body: formData,
+                mode: 'no-cors' // Disable CORS validation
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('Form submitted successfully!');
+                } else {
+                    alert('Error during submission!');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        }
     </script>
 </body>
-
 </html>
