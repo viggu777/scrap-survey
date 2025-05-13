@@ -210,24 +210,26 @@
         }
 
         // Google Sheets submission function
-        function submitToGoogleSheets() {
-            const form = document.getElementById('surveyForm');
-            const formData = new FormData(form);
+        function submitToGoogleSheets(e) {
+  const formData = new FormData(e.target);
+  
+  fetch('https://script.google.com/macros/s/AKfycbydUXdjeUYNZ9TDQX-wInOy7Z9mCQwxIwu_WSDgbt2ExQo9aW6k188fMWctesRF9js35Q/exec', {
+    method: 'POST',
+    body: formData,
+    mode: 'no-cors' // Add this line to disable CORS validation
+  })
+  .then(response => {
+    if (response.ok) {
+      alert('Form submitted successfully!');
+    } else {
+      alert('Error during submission!');
+    }
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
 
-            fetch('https://script.google.com/macros/s/AKfycbydUXdjeUYNZ9TDQX-wInOy7Z9mCQwxIwu_WSDgbt2ExQo9aW6k188fMWctesRF9js35Q/exec', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    console.log('Success!', response);
-                })
-                .catch(error => {
-                    console.error('Error during submission:', error);
-                });
-        }
 
 
     </script>
